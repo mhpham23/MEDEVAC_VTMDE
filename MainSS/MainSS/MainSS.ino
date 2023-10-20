@@ -211,6 +211,7 @@ void loop()
   {
     Serial.println("Switch Off!");
     //Turning hoist controller off
+    bootmode = 0;
     stop_all();
     LCD_printStabOff(tft);
     pkt_mainrx = ble_receive();
