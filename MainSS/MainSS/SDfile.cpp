@@ -107,9 +107,9 @@ void writeToSD(struct Packet pkt_mainrx, uint8_t &bootmode, double &elapsed_time
       Serial.println(elapsed_time);
       dataFile.print(elapsed_time);
       dataFile.print(" ");
-      dataFile.print(pkt_mainrx.CFangle_data);
+      dataFile.print(pkt_mainrx.CFangleX_data);
       dataFile.print(" ");
-      dataFile.println(pkt_mainrx.gyrovel_data);
+      dataFile.println(pkt_mainrx.gyroXvel_data);
 
     }
     else 
