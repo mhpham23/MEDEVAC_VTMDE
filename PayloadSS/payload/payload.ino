@@ -36,8 +36,6 @@ float CFangleY = 0.0;
 float CFangleZ = 0.0;
 float heading = 0.0;
 
-
-
 struct Packet pkt_payload;
 
 //Used by Kalman Filters

@@ -34,7 +34,7 @@ uint8_t bootmode = 0;
 long long sample = 0;
 double elapsed_time = 0.0;
 long startTime = 0;
-double current_speeed = 0;
+double current_speed = 0;
 double new_speed = 0;
 
 double last_pkt_time = 0;
