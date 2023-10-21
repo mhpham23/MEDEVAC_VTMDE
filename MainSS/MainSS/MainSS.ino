@@ -10,7 +10,7 @@
 #define ALGO_SWITCH 5
 #define DEBOUNCE_TIME 50
 #define BAUDRATE 115200
-#define TEST_MODE   RAISING
+#define TEST_MODE   NONE
 #define NONE        0
 #define RAISING     1
 #define LOWERING    2
@@ -19,6 +19,7 @@
 #define ANGLE_CONSTANT  2.8
 #define THRESHOLD       2.0
 #define VEL_CONSTANT    4.47
+#define ROC_THRESHOLD   20
 #define DOWN_SPEED      
 #define UP_SPEED
 
@@ -27,6 +28,11 @@ uint8_t bootmode = 0;
 long long sample = 0;
 double elapsed_time = 0.0;
 long startTime = 0;
+double current_speeed = 0;
+double new_speed = 0;
+
+double last_pkt_time = 0;
+struct Packet last_pktX;
 
 struct Packet pkt_mainrx;
 ezButton algoSwitch(ALGO_SWITCH);
@@ -37,6 +43,40 @@ void lanz_algo()
 {
   //TODO: Waiting for ryans
 } //END LANZ_ALGO()
+
+bool accepted_ROC() {
+  last_pktX = pkt_mainrx; // prev pkt
+  pkt_mainrx = ble_receive(); // new pkt
+  
+  double current_time = millis();
+  double time_difference = current_time - last_pkt_time; // elapsed time between packets
+
+  double angleROC = (pkt_mainrx.CFangleX_data - last_pktX.CFangleX_data) / time_difference; // ROC of the angle
+
+  last_pkt_time = current_time; // update last_pkt_time for the next iteration
+  
+  if (abs(pkt_mainrx.CFangleX_data) < 20.0 && abs(angleROC) < ROC_THRESHOLD) {
+    return true;
+  }
+  return false;
+}
+
+void ramp_speed(int current_speed, int new_speed) {
+  int speed_difference = current_speed - new_speed;
+  
+   if (speed_difference >= 0) { // ramp down
+      while (current_speed >= new_speed) {
+        set_pwm_speed(current_speed--);
+        delay(10);
+      }
+   }
+   else { // ramp up
+      while (current_speed <= new_speed) {
+        set_pwm_speed(current_speed++);
+        delay(10);
+      }
+   }
+}
 
 void test_proc()
 {
@@ -160,7 +200,9 @@ void loop()
       //Speed 0, only read and log data
       stop();
       pkt_mainrx = ble_receive();
-      //writeToSD(pkt_mainrx, bootmode, sample);
+      if (accepted_ROC()) {
+        writeToSD(pkt_mainrx, bootmode, elapsed_time, startTime);
+      }
       //LCD_printData(tft, pkt_mainrx.CFangleX_data, pkt_mainrx.gyroXvel_data);
     }
     else if (TEST_MODE == RAISING) 
@@ -211,11 +253,11 @@ void loop()
   {
     Serial.println("Switch Off!");
     //Turning hoist controller off
-    bootmode = 0;
     stop_all();
     LCD_printStabOff(tft);
     pkt_mainrx = ble_receive();
     LCD_printData(tft, pkt_mainrx.CFangleX_data, pkt_mainrx.gyroXvel_data);
+    bootmode = 0;
   } //END MANUAL MODE
 
 
