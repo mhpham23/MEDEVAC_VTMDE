@@ -183,9 +183,11 @@ void berryIMU_measure()
   magRaw[0] = (int)(buff[0] | (buff[1] << 8));   
   magRaw[1] = (int)(buff[2] | (buff[3] << 8));
   magRaw[2] = (int)(buff[4] | (buff[5] << 8));
+  
+  /*
   magRaw[0] -= (magXmin + magXmax) /2 ;
   magRaw[1] -= (magYmin + magYmax) /2 ;
-  magRaw[2] -= (magZmin + magZmax) /2 ;
+  magRaw[2] -= (magZmin + magZmax) /2 ; */
   
   readFrom(LSM6DSL_ADDRESS, LSM6DSL_OUT_X_L_G, 6, buff);
   gyrRaw[0] = (int)(buff[0] | (buff[1] << 8));   
@@ -208,7 +210,7 @@ void berryIMU_measure()
     //Convert Accelerometer values to degrees
   AccXangle = (float) (atan2(accRaw[1],accRaw[2])+M_PI)*RAD_TO_DEG;
   AccYangle = (float) (atan2(accRaw[2],accRaw[0])+M_PI)*RAD_TO_DEG;
-  AccZangle = (float) (asin(accRaw[2] / (sqrt(pow(accRaw[0], 2) + pow(accRaw[1], 2) + pow(accRaw[2], 2)) ))) * RAD_TO_DEG;
+  //AccZangle = (float) (asin(accRaw[2] / (sqrt(pow(accRaw[0], 2) + pow(accRaw[1], 2) + pow(accRaw[2], 2)) ))) * RAD_TO_DEG;
 
   //If IMU is up the correct way, use these lines
   AccZangle -= (float) 90.0;
@@ -221,7 +223,7 @@ void berryIMU_measure()
   //Complementary filter used to combine the accelerometer and gyro values.
   CFangleX=AA*(CFangleX+rate_gyr_x*DT) +(1 - AA) * AccXangle;
   CFangleY=AA*(CFangleY+rate_gyr_y*DT) +(1 - AA) * AccYangle;
-  CFangleZ = (AA*(CFangleZ+rate_gyr_z*DT) +(1 - AA) * AccZangle);
+  //CFangleZ = (AA*(CFangleZ+rate_gyr_z*DT) +(1 - AA) * AccZangle);
   
   // Kalman
   CFangleX= kalmanFilterX(AccXangle, rate_gyr_x);
@@ -311,8 +313,8 @@ void dbg_print()
   Serial.print(CFangleX);
   Serial.print("\t# CFangleY\t");
   Serial.print(CFangleY);
-  Serial.print("\t# CFangle\t");
-  Serial.print(pkt_payload.CFangle_data); 
+  //Serial.print("\t# CFangle\t");
+  //Serial.print(pkt_payload.CFangle_data); 
   /*
   Serial.print("\t# AccXNorm\t");
   Serial.print(accXnorm);
