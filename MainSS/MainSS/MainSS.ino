@@ -1,6 +1,7 @@
 //Developed by MEDEVAC Team's Codechief - Hoan Pham (mhpham23@vt.edu)
 //MainProcessing SS code for Teensy 4.1
 //#include "switch.h"
+
 #include <ezButton.h>
 #include "HoistController.h"
 #include "SDfile.h"
@@ -20,8 +21,13 @@
 #define THRESHOLD       2.0
 #define VEL_CONSTANT    4.47
 #define ROC_THRESHOLD   20
-#define DOWN_SPEED      
-#define UP_SPEED
+#define UP_SPEED        30
+#define DOWN_SPEED      10
+
+
+#define EPSILON         3 //Angle
+#define ALPHA           4 //Angle Velocity
+
 
 //Global Variables:
 uint8_t bootmode = 0;
@@ -38,10 +44,39 @@ struct Packet pkt_mainrx;
 ezButton algoSwitch(ALGO_SWITCH);
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
+
 //LANZEROTTI'S ALGO
 void lanz_algo()
 {
+  float angle = pkt_mainrx.CFangleX_data;
+  float vel = pkt_mainrx.gyroXvel_data;
   //TODO: Waiting for ryans
+  if (angle < EPSILON && vel < -ALPHA)
+  {
+    set_lower_mode();
+    ramp_speed(current_speed, DOWN_SPEED);
+  }
+  else if (angle < -EPSILON && vel >= -ALPHA)
+  {
+    set_raise_mode();
+    ramp_speed(current_speed, UP_SPEED);
+  }
+  else if (angle > -EPSILON && vel > ALPHA)
+  {
+    set_lower_mode();
+    ramp_speed(current_speed, DOWN_SPEED);
+  }
+  else if (angle > EPSILON && vel <= ALPHA)
+  {
+    set_raise_mode();
+    ramp_speed(current_speed, UP_SPEED);    
+  }
+  else 
+  {
+    set_raise_mode();
+    ramp_speed(current_speed, 0);
+  }
+  
 } //END LANZ_ALGO()
 
 bool accepted_ROC() {
@@ -90,7 +125,6 @@ void test_proc()
     set_raise_mode();
     set_pwm_speed(20);
     Serial.println("RAISING!");
-
   }
   else if ((pkt_mainrx.CFangle_data > -2.0) && (pkt_mainrx.CFangle_data < 2.0))
   {
@@ -189,11 +223,15 @@ void loop()
       Serial.println("Receiving BLE");
       //writeToSD(pkt_mainrx, bootmode, sample);
       //LCD_printData(tft, pkt_mainrx.CFangleX_data, pkt_mainrx.gyroXvel_data);
-      test_proc2();
+      if(accepted_ROC())
+      {
+        lanz_algo();
+        writeToSD(pkt_mainrx, bootmode, elapsed_time, startTime);
+      }
       pkt_mainrx = ble_receive();
       //writeToSD(pkt_mainrx, bootmode, sample);
       //LCD_printData(tft, pkt_mainrx.CFangleX_data, pkt_mainrx.gyroXvel_data);
-      test_proc2();
+      
     }
     else if (TEST_MODE == NONE)
     {
