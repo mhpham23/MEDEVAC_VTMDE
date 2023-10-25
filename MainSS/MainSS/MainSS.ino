@@ -11,7 +11,7 @@
 #define ALGO_SWITCH 5
 #define DEBOUNCE_TIME 50
 #define BAUDRATE 115200
-#define TEST_MODE   NONE
+#define TEST_MODE   ALGO
 #define NONE        0
 #define RAISING     1
 #define LOWERING    2
@@ -25,7 +25,7 @@
 #define DOWN_SPEED      10
 
 
-#define EPSILON         3 //Angle
+#define EPSILON         2 //Angle
 #define ALPHA           4 //Angle Velocity
 
 

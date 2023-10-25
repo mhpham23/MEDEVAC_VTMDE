@@ -39,7 +39,7 @@ struct Packet ble_receive()
   {
     // Read in the appropriate number of bytes to fit our Packet
     Serial6.readBytes((byte *) & pkt_rx,sizeof(Packet));
-
+    
     // Print the Packet contents
     Serial.print("RX: ");
     Serial.print(pkt_rx.CFangleX_data);
@@ -72,6 +72,8 @@ struct Packet ble_receive()
     }
     count++;
   }
+  
+
   return pkt_rx;
 }
 #endif
