@@ -31,7 +31,7 @@ void setup_LCD(Adafruit_ILI9341 tft)
   tft.setTextSize(2);
 
   tft.setCursor(5,60);
-  tft.print("STABILIZATION STATUS:");
+  tft.print("STABILIZATION:");
 
   tft.setCursor(5,90);
   tft.print("SWING ANGLE:");
@@ -43,28 +43,28 @@ void setup_LCD(Adafruit_ILI9341 tft)
   tft.print("CABLE LENGTH:");
 
   tft.setCursor(5,180);
-  tft.print("SENSOR MODE:");
+  tft.print("SENSOR:");
 
   tft.setCursor(5,210);
-  tft.print("BLE STATUS:");
+  tft.print("BLUETOOTH:");
 
 }
 
 void LCD_printStabOn(Adafruit_ILI9341 tft)
 {
   tft.setTextSize(2);
-  tft.fillRect(257,60,36,17, ILI9341_BLACK);
+  tft.fillRect(173,60,36,17, ILI9341_BLACK);
   tft.setTextColor(ILI9341_GREEN);
-  tft.setCursor(257,60);
+  tft.setCursor(173,60);
   tft.println("ON");
 }
 
 void LCD_printStabOff(Adafruit_ILI9341 tft)
 {
     tft.setTextSize(2);
-    tft.fillRect(257,60,36,17, ILI9341_BLACK);
+    tft.fillRect(173,60,36,17, ILI9341_BLACK);
     tft.setTextColor(ILI9341_RED);
-    tft.setCursor(257,60);
+    tft.setCursor(173,60);
     tft.println("OFF");
 }
 
@@ -73,16 +73,16 @@ void LCD_printSensorMode(Adafruit_ILI9341 tft)
   tft.setTextSize(2);
   if(SENSOR_MODE)
   {
-    tft.fillRect(149,180,110,17, ILI9341_BLACK);
+    tft.fillRect(89,180,110,17, ILI9341_BLACK);
     tft.setTextColor(ILI9341_CYAN);
-    tft.setCursor(149,180);
+    tft.setCursor(89,180);
     tft.println("BLUETOOTH");
   }
   else if (!SENSOR_MODE)
   {
-    tft.fillRect(149,180,110,17, ILI9341_BLACK);
+    tft.fillRect(89,180,110,17, ILI9341_BLACK);
     tft.setTextColor(ILI9341_CYAN);
-    tft.setCursor(149,180);
+    tft.setCursor(89,180);
     tft.println("OTHER");
   }
 }
@@ -92,16 +92,16 @@ void LCD_printBLEstatus(Adafruit_ILI9341 tft)
   tft.setTextSize(2);
   if(BLE_CON)
   {
-    tft.fillRect(137,210,144,17, ILI9341_BLACK);
+    tft.fillRect(125,210,144,17, ILI9341_BLACK);
     tft.setTextColor(ILI9341_GREEN);
-    tft.setCursor(137,210);
+    tft.setCursor(125,210);
     tft.println("CONNECTED");    
   }
   else
   {
-    tft.fillRect(137,210,144,17, ILI9341_BLACK);
+    tft.fillRect(125,210,144,17, ILI9341_BLACK);
     tft.setTextColor(ILI9341_RED);
-    tft.setCursor(137,210);
+    tft.setCursor(125,210);
     tft.println("DISCONNECTED");
   }
 }
