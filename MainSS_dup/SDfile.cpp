@@ -96,8 +96,8 @@ void writeToSD(struct Packet pkt_mainrx, uint8_t &bootmode, double &elapsed_time
       //Serial.println(elapsed_time);
       long time_lap = millis() - startTime;
       double time_lap_sec = (double) time_lap / 1000;
-      elapsed_time = (double) (time_lap_sec / 1000) + elapsed_time;
-      
+      //elapsed_time = (double) (time_lap_sec / 1000) + elapsed_time;
+      elapsed_time = time_lap_sec;
       /*
       Serial.print("Start Time: ");
       Serial.print(startTime);
@@ -106,9 +106,8 @@ void writeToSD(struct Packet pkt_mainrx, uint8_t &bootmode, double &elapsed_time
       Serial.print(time_lap_sec);     
       Serial.print(" ");
       Serial.print("Elapsed time: ");
-      Serial.println(elapsed_time);
-      */
-      
+      Serial.println(elapsed_time); */
+      //dataFile.print(elapsed_time);
       dataFile.print(elapsed_time);
       dataFile.print(" ");
       dataFile.print(pkt_mainrx.CFangleX_data);

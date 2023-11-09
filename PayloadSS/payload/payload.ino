@@ -302,10 +302,7 @@ void berryIMU_measure()
 
   pkt_payload.CFangleX_data = CFangleX;
   pkt_payload.gyroXvel_data = rate_gyr_x;
-  /*pkt_payload.CFangleY_data = CFangleY;
-  pkt_payload.gyroYvel_data = rate_gyr_y;*/
-  pkt_payload.CFangle_data = CFangleX;
-  pkt_payload.gyrovel_data = rate_gyr_x;
+
 
 }
 
@@ -358,7 +355,7 @@ void dbg_print()
   Serial.print("\t# CFangleZ\t");
   Serial.print(CFangleZ);  
   Serial.print("\t# CFangle\t");
-  Serial.print(pkt_payload.CFangle_data);
+  Serial.print(pkt_payload.CFangleX_data);
   Serial.print("\t# X vel\t");
   Serial.print(rate_gyr_x);
   Serial.print("\t# Y vel\t");
