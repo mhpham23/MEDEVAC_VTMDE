@@ -13,6 +13,8 @@
 #define RAISING_RELAY_PIN 14
 #define RAISE_HOIST_PIN 37
 #define LOWER_HOIST_PIN 36
+#define LOWER_IND_LED 6
+#define RAISE_IND_LED 7
 
 void config_SPEED_HOIST_PIN()
 {
@@ -23,13 +25,13 @@ void config_SPEED_HOIST_PIN()
 void config_LOWERING_RELAY_PIN()
 {
   pinMode(LOWERING_RELAY_PIN, OUTPUT);
-  digitalWrite(LOWERING_RELAY_PIN, HIGH);
+  pinMode(LOWER_IND_LED, OUTPUT);
 }
 
 void config_RAISING_RELAY_PIN()
 {
   pinMode(RAISING_RELAY_PIN, OUTPUT);
-  digitalWrite(RAISING_RELAY_PIN, HIGH);
+  pinMode(RAISE_IND_LED, OUTPUT);
 }
 
 void config_EN_RELAY_PIN()
@@ -56,19 +58,24 @@ void set_pwm_speed(uint8_t duty_cycle)
 
 void set_raise_mode()
 {
-  digitalWrite(LOWERING_RELAY_PIN, HIGH);
+  digitalWrite(LOWERING_RELAY_PIN, LOW);
   digitalWrite(RAISING_RELAY_PIN, HIGH);
   digitalWrite(LOWER_HOIST_PIN, LOW);
   digitalWrite(RAISE_HOIST_PIN, HIGH);
+  digitalWrite(LOWER_IND_LED, LOW);
+  digitalWrite(RAISE_IND_LED, HIGH);
+  
 }
 
 void set_lower_mode()
 {
   
-  digitalWrite(RAISING_RELAY_PIN, HIGH);
+  digitalWrite(RAISING_RELAY_PIN, LOW);
   digitalWrite(LOWERING_RELAY_PIN, HIGH);
   digitalWrite(RAISE_HOIST_PIN, LOW);
   digitalWrite(LOWER_HOIST_PIN, HIGH);
+  digitalWrite(RAISE_IND_LED, LOW);
+  digitalWrite(LOWER_IND_LED, HIGH);
 }
 void off()
 {
@@ -84,6 +91,8 @@ void stop_all()
   digitalWrite(LOWERING_RELAY_PIN, LOW);
   digitalWrite(RAISING_RELAY_PIN, LOW);
   analogWrite(SPEED_HOIST_PIN, 0);
+  digitalWrite(LOWER_IND_LED, LOW);
+  digitalWrite(RAISE_IND_LED, LOW);
 }
 
 void stop()
