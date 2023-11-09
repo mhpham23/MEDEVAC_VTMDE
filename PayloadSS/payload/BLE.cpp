@@ -16,8 +16,6 @@ void blePayload_setup()
 }
 void ble_transmit(struct Packet toSend)
 {
-  pkt_tx.CFangleX_data = toSend.CFangleX_data;
-  pkt_tx.gyroXvel_data = toSend.gyroXvel_data;
   pkt_tx.CFangle_data = toSend.CFangle_data;
   pkt_tx.gyrovel_data = toSend.gyrovel_data;
 

@@ -35,6 +35,8 @@ float CFangleX = 0.0;
 float CFangleY = 0.0;
 float CFangleZ = 0.0;
 float heading = 0.0;
+float dummy = 0.0;
+float dummy_vel = 0.0;
 
 struct Packet pkt_payload;
 
@@ -228,7 +230,8 @@ void berryIMU_measure()
   // Kalman
   CFangleX= kalmanFilterX(AccXangle, rate_gyr_x);
   CFangleY= kalmanFilterY(AccYangle, rate_gyr_y);
-
+  dummy = sqrt(CFangleX*CFangleX + CFangleY*CFangleY);
+  dummy_vel = sqrt(rate_gyr_x*rate_gyr_x + rate_gyr_y*rate_gyr_y);
   //Tilt Compensation
 
   //Compute heading  
@@ -250,11 +253,12 @@ void berryIMU_measure()
   
   elapsed_time = millis() - startTime;
   //Serial.print(elapsed_time);
-  time_stamp = (double) elapsed_time / 1000.0;
+  //time_stamp = (double) elapsed_time / 1000.0;
 
-  pkt_payload.CFangleX_data = CFangleX;
-  pkt_payload.gyroXvel_data = rate_gyr_x;
-
+  pkt_payload.CFangle_data = dummy;
+  pkt_payload.gyrovel_data = dummy_vel;
+  
+  /*
   if ((heading <= 45) || (heading >= 315) || ((heading >= 135) && (heading <= 225)))
   {
     pkt_payload.CFangle_data = CFangleX;
@@ -265,6 +269,7 @@ void berryIMU_measure()
     pkt_payload.CFangle_data = CFangleY;
     pkt_payload.gyrovel_data = rate_gyr_y;
   }
+  */
 
 }
 

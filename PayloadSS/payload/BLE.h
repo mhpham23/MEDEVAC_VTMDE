@@ -10,8 +10,6 @@
 
 struct Packet
 {
-  float CFangleX_data;
-  float gyroXvel_data;
   float CFangle_data;
   float gyrovel_data;
 };
